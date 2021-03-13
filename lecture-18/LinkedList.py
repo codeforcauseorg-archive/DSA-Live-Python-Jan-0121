@@ -65,6 +65,41 @@ class LinkedList:
         temp.next = None
         return removed
 
+    def hasCycle(self):
+        slow, fast = self.head, self.head
+        while fast is not None and fast.next is not None:
+            fast = fast.next.next
+            slow = slow.next
+            if slow == fast:
+                return True
+        return False
+
+    # assume it has cycle
+    def cycleLength(self):
+        slow, fast = self.head, self.head
+        while fast is not None and fast.next is not None:
+            fast = fast.next.next
+            slow = slow.next
+            if slow == fast:
+                break
+
+        temp = slow
+        length = 0
+        while True:
+            temp = temp.next
+            length += 1
+            if temp == slow:
+                break
+        return length
+
+    # O(N)
+    def middle(self):
+        slow, fast = self.head, self.head
+        while fast is not None and fast.next is not None:
+            fast = fast.next.next
+            slow = slow.next
+        return slow.val
+
     # O(N)
     def display(self):
         temp = self.head
@@ -82,7 +117,12 @@ if __name__ == '__main__':
     ll.display()
     ll.insertAfter(5, 8)
     ll.display()
-    print(ll.removeFirst())
-    ll.display()
-    print(ll.removeLast())
-    ll.display()
+    # print(ll.removeFirst())
+    # ll.display()
+    # print(ll.removeLast())
+    # ll.display()
+    last = ll.find(2)
+    start = ll.find(8)
+    last.next = start
+
+    print(ll.cycleLength())
