@@ -170,6 +170,65 @@ class BST:
             leftToRight = not leftToRight
         return ans
 
+    def rightView(self):
+        ans = []
+        if self.isEmpty():
+            return ans
+
+        queue = deque()
+        queue.append(self.root)
+        leftToRight = True
+        while queue:
+            # level size
+            ls = len(queue)
+            for i in range(ls):
+                popped = queue.popleft()
+                if i == ls - 1:
+                    ans.append(popped.value)
+                # insert the children
+                if popped.left:
+                    queue.append(popped.left)
+                if popped.right:
+                    queue.append(popped.right)
+        return ans
+
+    def nextNodeLevel(self, key):
+        if self.isEmpty():
+            return None
+
+        queue = deque()
+        queue.append(self.root)
+
+        while queue:
+
+            popped = queue.popleft()
+
+            if popped.left:
+                queue.append(popped.left)
+            if popped.right:
+                queue.append(popped.right)
+
+            if popped.value == key:
+                break
+
+            if queue:
+                return queue[0]
+            return None
+
+
+    # DFS
+    def pathSum(self, sum):
+        return self.checkPath(self.root, sum)
+    def checkPath(self, node, sum):
+        # base condition
+        if node == None:
+            return False
+
+        if node.value == sum and node.left == None and node.right == None:
+            return True
+
+        return self.checkPath(node.left, sum-node.value) or self.checkPath(node.right, sum-node.value)
+
 if __name__ == '__main__':
     bst = BST()
     # bst.insert(15)
@@ -182,4 +241,4 @@ if __name__ == '__main__':
     # print(bst.height())
     # print(bst.sum())
     # bst.display()
-    print(bst.zigzag())
+    print(bst.pathSum(90))
