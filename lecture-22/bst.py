@@ -132,6 +132,7 @@ class BST:
 
         return self.checkPath(node.left, sum-node.value) or self.checkPath(node.right, sum-node.value)
 
+
     def allPathSum(self, sum):
         result = []
         self.findAllPaths(self.root, sum, [], result)
@@ -167,7 +168,46 @@ class BST:
 
         return self.findPathNumbersSum(node.left, currentSum) + self.findPathNumbersSum(node.right, currentSum)
 
-    
+    def countPaths(self, sum):
+        return self.countPathsRec(self.root, sum, [])
+    def countPathsRec(self, node, sum, currentPath):
+        if node == None:
+            return 0
+
+        currentPath.append(node.val)
+        count = 0
+        pathSum = 0
+        for i in range(len(currentPath)-1, -1, -1):
+            pathSum += currentPath[i]
+            if pathSum == sum:
+                count += 1
+
+        count += self.countPathsRec(node.left, sum, currentPath) + self.countPathsRec(node.right, sum, currentPath)
+        # backtrack
+        del currentPath[-1]
+        return count
+
+    def diameter(self):
+        self.dia = 0
+        self.diaHeight(self.root)
+        return self.dia
+    def diaHeight(self, node):
+        if node == None:
+            return 0
+
+        leftHeight = self.diaHeight(node.left)
+        rightHeight = self.diaHeight(node.right)
+
+        if leftHeight != None and rightHeight != None:
+            diaForCurrentNode = leftHeight + rightHeight + 1
+
+            # update the global one
+            self.dia = max(self.dia, diaForCurrentNode)
+
+        return max(leftHeight, rightHeight) + 1
+
+    # https://leetcode.com/problems/binary-tree-maximum-path-sum/
+    # TODO
 
 if __name__ == '__main__':
     bst = BST()
